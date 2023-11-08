@@ -1,0 +1,4 @@
+sources:
+  "22.02":
+    url: "https://github.com/oclint/oclint/archive/refs/tags/v22.02.tar.gz"
+    sha256: "2444ab33cb3525069d05d3b5df3e447260cc297494ba4fe3b199b9cfb85ec348"
