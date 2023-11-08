@@ -1,0 +1,10 @@
+sources:
+  "1.0-2022-11-11":
+    url: "https://www.github.com/raspberrypi/hats/archive/ae057ecca83e25e43531b6eed499b2b728c4ddf4.tar.gz"
+    sha256: "b60cf644cd309c8a380cc12139dc03c185c5c4263dec2e5cde92c8d6f5151b88"
+  "1.0-2022-03-22":
+    url: "https://www.github.com/raspberrypi/hats/archive/29c563660d965b056e3f21bb6bf39e3c544aefe2.tar.gz"
+    sha256: "0278bb25fc9ee75c9ccf59a561448f7f50e7639fc32cb4fbda1d4ca9676ff183"
+  "1.0":
+    url: "https://github.com/raspberrypi/hats/archive/refs/tags/1.0.tar.gz"
+    sha256: "c323de40e08a79b120c3295fce2e46de839cdf59d8d92fcb3f13c048bd2de3a4"
