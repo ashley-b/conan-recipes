@@ -37,6 +37,9 @@ class oclintConan(ConanFile):
     def build_requirements(self):
         self.tool_requires("ninja/1.11.1")
 
+    def requirements(self):
+        self.requires("zlib/1.3")
+
     def generate(self):
         pass
 
