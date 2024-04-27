@@ -1,9 +1,9 @@
 import os
 
 from conan import ConanFile
-from conan.tools.layout import basic_layout
 from conan.tools.files import copy, chdir, get
-
+from conan.tools.layout import basic_layout
+from conan.tools.system.package_manager import Apt, Dnf
 
 class oclintConan(ConanFile):
     name = "oclint"
@@ -26,6 +26,16 @@ class oclintConan(ConanFile):
 
     def layout(self):
         basic_layout(self)
+
+    def system_requirements(self):
+        apt = Apt(self)
+        apt.install(["curl", "git", "xz-utils"])
+
+        dnf = Dnf(self)
+        dnf.install(["curl", "git", "xz"])
+
+    def build_requirements(self):
+        self.tool_requires("ninja/1.11.1")
 
     def generate(self):
         pass
