@@ -2,8 +2,9 @@ import os
 
 from conan import ConanFile
 from conan.tools.files import copy, chdir, get
-from conan.tools.layout import basic_layout
+#from conan.tools.layout import basic_layout
 from conan.tools.system.package_manager import Apt, Dnf
+from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 
 class oclintConan(ConanFile):
     name = "oclint"
@@ -25,7 +26,7 @@ class oclintConan(ConanFile):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
 
     def layout(self):
-        basic_layout(self)
+        cmake_layout(self)
 
     def system_requirements(self):
         apt = Apt(self)
@@ -41,7 +42,12 @@ class oclintConan(ConanFile):
         self.requires("zlib/1.3")
 
     def generate(self):
-        pass
+        with chdir(self, os.path.join(self.source_folder, "oclint-scripts")):
+            tc = CMakeDeps(self)
+            tc.generate()
+
+            tc = CMakeToolchain(self)
+            tc.generate()
 
     def build(self):
         with chdir(self, os.path.join(self.source_folder, "oclint-scripts")):
