@@ -2,6 +2,8 @@ import os
 
 from conan import ConanFile
 from conan.errors import ConanInvalidConfiguration
+from conan.tools.build import cross_building
+from conan.tools.env import Environment, VirtualBuildEnv
 from conan.tools.files import copy, chdir, get
 from conan.tools.gnu import Autotools, AutotoolsToolchain
 from conan.tools.layout import basic_layout
@@ -39,11 +41,19 @@ class IrrlichtConan(ConanFile):
         basic_layout(self, src_folder="src")
 
     def validate(self):
-        if is_msvc(self):
-            raise ConanInvalidConfiguration("MSVC is not supported")
+        if cross_building(self):
+            raise ConanInvalidConfiguration(f"{self.name} Cross building is not yet supported. Contributions are welcome")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
+
+    def build_requirements(self):
+        if self.settings_build.os == "Windows":
+            self.win_bash = True
+            if not self.conf.get("tools.microsoft.bash:path", check_type=str):
+                self.tool_requires("msys2/cci.latest")
+        if is_msvc(self):
+            self.tool_requires("automake/1.16.5")
 
     def requirements(self):
         self.requires('libjpeg/9e')
@@ -54,8 +64,29 @@ class IrrlichtConan(ConanFile):
         self.requires('zlib/1.3')
 
     def generate(self):
+        venv = VirtualBuildEnv(self)
+        venv.generate()
+    
         tc = AutotoolsToolchain(self)
+        if is_msvc(self):
+            tc.extra_cflags.append("-FS")
+            tc.extra_cxxflags.append("-FS")
         tc.generate()
+
+        if is_msvc(self):
+            env = Environment()
+            automake_conf = self.dependencies.build["automake"].conf_info
+            compile_wrapper = unix_path(self, automake_conf.get("user.automake:compile-wrapper", check_type=str))
+            ar_wrapper = unix_path(self, automake_conf.get("user.automake:lib-wrapper", check_type=str))
+            env.define("CC", f"{compile_wrapper} cl -nologo")
+            env.define("CXX", f"{compile_wrapper} cl -nologo")
+            env.define("LD", "link -nologo")
+            env.define("AR", f"{ar_wrapper} lib")
+            env.define("NM", "dumpbin -symbols")
+            env.define("OBJDUMP", ":")
+            env.define("RANLIB", ":")
+            env.define("STRIP", ":")
+            env.vars(self).save_script("conanbuild_msvc")
 
     def build(self):
         with chdir(self, os.path.join(self.source_folder, 'source', 'Irrlicht')):
