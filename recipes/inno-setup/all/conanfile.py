@@ -27,10 +27,10 @@ class innosetupConan(ConanFile):
 
     def validate(self):
         if self.settings.arch not in ["x86", "x86_64"]:
-            raise ConanInvalidConfiguration(f"{self.name} binaries are only provided for x86 or x86_64 architectures")
+            raise ConanInvalidConfiguration("Binaries are only provided for x86 or x86_64 architectures")
 
         if self.settings.os != "Windows":
-            raise ConanInvalidConfiguration(f"{self.name} only supports Windows")
+            raise ConanInvalidConfiguration(f"Only supports Windows, not {self.settings.os}.")
 
     def build(self):
         download(self, **self.conan_data["sources"][self.version], filename=self._installer_file_name)
