@@ -1,9 +1,11 @@
 import os
 
 from conan import ConanFile
+from conan.errors import ConanInvalidConfiguration
 from conan.tools.files import copy, chdir, get
 from conan.tools.gnu import Autotools, AutotoolsToolchain
 from conan.tools.layout import basic_layout
+from conan.tools.microsoft import is_msvc
 
 required_conan_version = ">=1.50.0"
 
@@ -35,6 +37,10 @@ class IrrlichtConan(ConanFile):
 
     def layout(self):
         basic_layout(self, src_folder="src")
+
+    def validate(self):
+        if is_msvc(self):
+            raise ConanInvalidConfiguration("MSVC is not supported")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
