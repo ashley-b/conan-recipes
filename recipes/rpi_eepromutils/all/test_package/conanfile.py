@@ -1,4 +1,4 @@
-from six import StringIO
+import os
 from conan import ConanFile
 from conan.tools.layout import basic_layout
 from conan.tools.build import can_run
@@ -17,21 +17,8 @@ class TestPackageConan(ConanFile):
 
     def test(self):
         if can_run(self):
-            apps = [
-                (
-                    "eepmake",
-                    "Wrong input format.\n"
-                    "Try 'eepmake input_file output_file [dt_file] [-c custom_file_1 ... custom_file_n]'"
-                ),
-                (
-                    "eepdump",
-                    "Wrong input format.\n"
-                    "Try 'eepdump input_file output_file'"
-                )
-            ]
-            for cmd in apps:
-                output = StringIO()
-                self.run(cmd[0], output, ignore_errors=True, env="conanrun")
-                output_str = str(output.getvalue())
-                self.output.info("Output:\n{}".format(output_str))
-                assert(cmd[1] in output_str)
+            src_file = os.path.join(self.source_folder, 'eeprom_settings.txt')
+            bin_file = os.path.join(self.build_folder, 'eeprom_settings.bin')
+            dump_file = os.path.join(self.build_folder, 'eeprom_settings.dump')
+            self.run(f'eepmake {src_file} {bin_file}', env="conanrun")
+            self.run(f'eepdump {bin_file} {dump_file}', env="conanrun")
