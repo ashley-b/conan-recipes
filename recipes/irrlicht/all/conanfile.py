@@ -7,7 +7,7 @@ from conan.tools.gnu import Autotools, AutotoolsToolchain
 from conan.tools.layout import basic_layout
 from conan.tools.microsoft import is_msvc
 
-required_conan_version = ">=1.50.0"
+required_conan_version = ">=2"
 
 class IrrlichtConan(ConanFile):
     name = "irrlicht"
@@ -26,14 +26,7 @@ class IrrlichtConan(ConanFile):
         "shared": False,
         "fPIC": True,
     }
-
-    def config_options(self):
-        if self.settings.os == "Windows":
-            del self.options.fPIC
-
-    def configure(self):
-        if self.options.shared:
-            self.options.rm_safe("fPIC")
+    implements = ["auto_shared_fpic"]
 
     def layout(self):
         basic_layout(self, src_folder="src")
