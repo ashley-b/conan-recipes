@@ -6,7 +6,7 @@ from conan.tools.files import copy, chdir, get
 from conan.tools.gnu import Autotools, AutotoolsToolchain
 from conan.tools.layout import basic_layout
 
-required_conan_version = ">=1.50.0"
+required_conan_version = ">=2.4"
 
 class RpiEepromutilsConan(ConanFile):
     name = "rpi_eepromutils"
@@ -17,6 +17,7 @@ class RpiEepromutilsConan(ConanFile):
     topics = ("eeprom", "rpi")
     package_type = "application"
     settings = "os", "compiler", "build_type", "arch"
+    languages = "C"
 
     @property
     def _app_root_dir(self):
@@ -28,11 +29,6 @@ class RpiEepromutilsConan(ConanFile):
 
     def layout(self):
         basic_layout(self, src_folder="src")
-
-    def configure(self):
-        self.options.rm_safe("fPIC")
-        self.settings.rm_safe("compiler.libcxx")
-        self.settings.rm_safe("compiler.cppstd")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
