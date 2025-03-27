@@ -44,7 +44,7 @@ class RpiEepromutilsConan(ConanFile):
 
     def package(self):
         copy(self, "LICENCE", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"), keep_path=False)
-        bin_dir = dst=os.path.join(self.package_folder, "bin")
+        bin_dir = os.path.join(self.package_folder, "bin")
         copy(self, "eepmake", src=self._app_root_dir, dst=bin_dir)
         copy(self, "eepdump", src=self._app_root_dir, dst=bin_dir)
         copy(self, "eepflash.sh", src=self._app_root_dir, dst=bin_dir)
