@@ -18,6 +18,7 @@ class RpiEepromutilsConan(ConanFile):
     package_type = "application"
     settings = "os", "compiler", "build_type", "arch"
     languages = "C"
+    deprecated = True
 
     @property
     def _app_root_dir(self):
