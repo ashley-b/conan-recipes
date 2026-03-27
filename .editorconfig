@@ -3,10 +3,19 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
-insert_final_newline = true
 indent_style = space
+insert_final_newline = true
 tab_width = 4
 trim_trailing_whitespace = true
+
+# Ignore diffs and patches
+[*.{diff,patch}]
+charset = unset
+end_of_line = unset
+indent_style = unset
+insert_final_newline = unset
+tab_width = unset
+trim_trailing_whitespace = unset
 
 [*.md]
 tab_width = 2
@@ -17,6 +26,3 @@ max_line_length = 200
 
 [*.yml]
 tab_width = 2
-
-[*.{diff,patch}]
-trim_trailing_whitespace = false
